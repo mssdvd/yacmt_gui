@@ -34,8 +34,11 @@ class YACMT(QWidget):
         self.lcdSpeed.display(yacm_json.get("speed"))
 
 
-if __name__ == '__main__':
-
+def main():
     app = QApplication(sys.argv)
     ex = YACMT()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
