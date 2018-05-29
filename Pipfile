@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+"pyqt5" = "*"
+requests = "*"
+
+[dev-packages]
+"flake8" = "*"
+pydoc-utils = "*"
+
+[requires]
+python_version = "3.6"
