@@ -8,4 +8,4 @@ setup(
     packages=['yacmt_gui'],
     install_requires=['pyqt5', 'requests', 'psycopg2', 'sqlalchemy'],
     extras_require={'dev': ['flake8']},
-    entry_points={'console_scripts': ['yacmt_gui = main:main']})
+    entry_points={'console_scripts': ['yacmt_gui = yacmt_gui.main:main']})
