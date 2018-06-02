@@ -1,7 +1,7 @@
 import datetime
+import json
 import sys
 
-import requests
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import (QApplication, QGridLayout, QLabel, QLCDNumber,
                              QWidget)
@@ -57,7 +57,7 @@ class YacmtGUI(QWidget):
         self.show()
 
     def _update_display(self):
-        yacmt_json = requests.get("http://localhost:8080").json()
+        yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
         self.lcdRPM.display(yacmt_json.get("eng_rpm"))
         self.lcdSpeed.display(yacmt_json.get("speed"))
         self.lcdCMV.display(yacmt_json.get("control_mod_voltage"))
@@ -65,8 +65,8 @@ class YacmtGUI(QWidget):
             str(datetime.timedelta(seconds=yacmt_json.get("run_time"))))
 
     def _new_report(self):
-        yacm_json = requests.get("http://localhost:8080").json()
-        insert_report(yacm_json)
+        yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+        insert_report(yacmt_json)
 
 
 def main():

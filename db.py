@@ -1,5 +1,4 @@
 import datetime
-import json
 from os.path import expanduser
 from typing import Any, Dict
 
