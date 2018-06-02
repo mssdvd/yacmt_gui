@@ -1,7 +1,7 @@
 import datetime
 import json
 from os.path import expanduser
-from typing import Any
+from typing import Any, Dict
 
 from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
                         create_engine)
@@ -12,6 +12,8 @@ Base = declarative_base()  # type: Any
 sqlite_db = "sqlite:///{}/yacmt.db".format(expanduser("~"))
 psgsql_db = "***REMOVED***"
 
+sqlite_engine = create_engine(sqlite_db)
+
 
 class Vehicle(Base):
     __tablename__ = 'vehicles'
@@ -20,7 +22,7 @@ class Vehicle(Base):
     name = Column(String(40), nullable=False)
     description = Column(String(100))
 
-    def __init__(self, name, description):
+    def __init__(self, name: str, description: str = ""):
         self.name = name
         self.description = description
 
@@ -46,13 +48,17 @@ class Report(Base):
 
 def init_db():
     """Create a SQLite database if it doesn't exits"""
-    sqlite_engine = create_engine(sqlite_db)
     Base.metadata.create_all(sqlite_engine)
+    Session = sessionmaker(bind=sqlite_engine)
+    session = Session()
+    if session.query(Vehicle.id).scalar() is None:
+        # add a default vehicle
+        session.add(Vehicle("Toyota Yaris", "Fantastica auto"))
+        session.commit()
 
 
 def insert_vehicle(name: str, description: str):
     """Insert a new vehicle"""
-    sqlite_engine = create_engine(sqlite_db)
     new_vehicle = Vehicle(name, description)
     Session = sessionmaker(bind=sqlite_engine)
     session = Session()
@@ -60,9 +66,8 @@ def insert_vehicle(name: str, description: str):
     session.commit()
 
 
-def insert_report(data, vehicle: int = 1):
+def insert_report(data: Dict, vehicle: int = 1):
     """Insert a new report"""
-    sqlite_engine = create_engine(sqlite_db)
     data.update({
         "vehicle": vehicle,
         "datetime": datetime.datetime.now(),
@@ -73,13 +78,3 @@ def insert_report(data, vehicle: int = 1):
     new_report = Report(**data)
     session.add(new_report)
     session.commit()
-
-
-def test_insert_report():
-    with open("/tmp/yacmt-server.json") as f:
-        data = json.loads(f.read())
-        insert_report(data)
-
-
-if __name__ == "__main__":
-    test_insert_report()
