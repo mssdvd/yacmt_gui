@@ -6,10 +6,14 @@ name = "pypi"
 [packages]
 "pyqt5" = "*"
 requests = "*"
+"psycopg2" = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 "flake8" = "*"
 pydoc-utils = "*"
+ipython = "*"
+pudb = "*"
 
 [requires]
 python_version = "3.6"
