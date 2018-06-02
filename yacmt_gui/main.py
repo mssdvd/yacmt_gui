@@ -6,7 +6,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import (QApplication, QGridLayout, QLabel, QLCDNumber,
                              QWidget)
 
-from db import init_db, insert_report
+from .db import init_db, insert_report
 
 
 class YacmtGUI(QWidget):
