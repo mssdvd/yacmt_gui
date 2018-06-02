@@ -61,8 +61,11 @@ class YacmtGUI(QWidget):
         self.lcdRPM.display(yacmt_json.get("eng_rpm"))
         self.lcdSpeed.display(yacmt_json.get("speed"))
         self.lcdCMV.display(yacmt_json.get("control_mod_voltage"))
-        self.lcdRunTime.display(
-            str(datetime.timedelta(seconds=yacmt_json.get("run_time"))))
+        try:
+            self.lcdRunTime.display(
+                str(datetime.timedelta(seconds=yacmt_json.get("run_time"))))
+        except TypeError as e:
+            self.lcdRunTime.display("00:00:00")
 
     def _new_report(self):
         yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
