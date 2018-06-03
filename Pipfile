@@ -4,9 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"PyQt5" = "*"
-"psycopg2" = "*"
+"pyqt5" = "*"
 sqlalchemy = "*"
+yacmt = "*"
+"psycopg2" = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
 "flake8" = "*"

@@ -2,7 +2,7 @@ import datetime
 import json
 import sys
 
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QGridLayout, QLabel,
                              QLCDNumber, QMainWindow, QWidget, qApp)
@@ -76,6 +76,9 @@ class YacmtGUI(QMainWindow):
 
     def _update_display(self):
         yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+        for k, v in yacmt_json.items():
+            if v in ("NO DATA", "ERROR", "?"):
+                yacmt_json[k] = 0
         self.lcdRPM.display(yacmt_json.get("eng_rpm"))
         self.lcdSpeed.display(yacmt_json.get("speed"))
         self.lcdCMV.display(yacmt_json.get("control_mod_voltage"))
