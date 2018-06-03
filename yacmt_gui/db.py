@@ -2,8 +2,8 @@ import datetime
 from os.path import expanduser
 from typing import Any, Dict
 
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
-                        create_engine)
+from sqlalchemy import (BigInteger, Boolean, Column, DateTime, ForeignKey,
+                        Integer, String, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -33,16 +33,16 @@ class Report(Base):
     vehicle = Column(ForeignKey('vehicles.id'), nullable=False)
     datetime = Column(DateTime, nullable=False)
     sent = Column(Boolean)
-    eng_load = Column(Integer)
-    eng_cool_temp = Column(Integer)
-    intake_manifold_abs_press = Column(Integer)
-    eng_rpm = Column(Integer)
-    speed = Column(Integer)
-    intake_air_temp = Column(Integer)
-    mass_air_flow = Column(Integer)
-    throttle_pos = Column(Integer)
-    run_time = Column(Integer)
-    control_mod_voltage = Column(Integer)
+    eng_load = Column(BigInteger)
+    eng_cool_temp = Column(BigInteger)
+    intake_manifold_abs_press = Column(BigInteger)
+    eng_rpm = Column(BigInteger)
+    speed = Column(BigInteger)
+    intake_air_temp = Column(BigInteger)
+    mass_air_flow = Column(BigInteger)
+    throttle_pos = Column(BigInteger)
+    run_time = Column(BigInteger)
+    control_mod_voltage = Column(BigInteger)
 
 
 def init_db():
