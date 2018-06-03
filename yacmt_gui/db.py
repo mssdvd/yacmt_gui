@@ -61,8 +61,14 @@ def insert_vehicle(name: str, description: str):
     new_vehicle = Vehicle(name, description)
     Session = sessionmaker(bind=sqlite_engine)
     session = Session()
-    session.add(new_vehicle)
-    session.commit()
+    try:
+        session.add(new_vehicle)
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 
 def insert_report(data: Dict, vehicle: int = 1):
@@ -72,8 +78,15 @@ def insert_report(data: Dict, vehicle: int = 1):
         "datetime": datetime.datetime.now(),
         "sent": False
     })
-    session = sessionmaker(bind=sqlite_engine)
-    session = session()
-    new_report = Report(**data)
-    session.add(new_report)
-    session.commit()
+    Session = sessionmaker(bind=sqlite_engine)
+    session = Session()
+    try:
+        new_report = Report(**data)
+        session.add(new_report)
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
