@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='yacmt_gui',
-    version='0.1.1',
+    version='0.2',
     author='Davide Masserut',
     author_email='d.masserut@gmail.com',
     packages=['yacmt_gui'],
