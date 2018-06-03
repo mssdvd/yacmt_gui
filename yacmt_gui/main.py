@@ -2,21 +2,40 @@ import datetime
 import json
 import sys
 
-from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import (QApplication, QGridLayout, QLabel, QLCDNumber,
-                             QWidget)
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QAction, QApplication, QGridLayout, QLabel,
+                             QLCDNumber, QMainWindow, QWidget, qApp)
 
-from .db import init_db, insert_report
+from sqlalchemy.exc import OperationalError
+
+from .db import init_db, insert_report, upload_reports
 
 
-class YacmtGUI(QWidget):
+class YacmtGUI(QMainWindow):
     def __init__(self):
         super().__init__()
         init_db()
         self.initUI()
 
     def initUI(self):
-        grid = QGridLayout()
+        main_widget = QWidget()
+        main_widget.showFullScreen()
+        self.setCentralWidget(main_widget)
+
+        exit_action = QAction(
+            QIcon.fromTheme("application-exit"), "Exit", self)
+        exit_action.triggered.connect(qApp.quit)
+
+        upload_action = QAction("Upload", self)
+        upload_action.triggered.connect(self._upload_reports)
+
+        self.toolbar = self.addToolBar("Actions")
+        self.toolbar.addAction(exit_action)
+        self.toolbar.addAction(upload_action)
+
+        # Grid Layout
+        grid = QGridLayout(main_widget)
 
         # Speed
         self.lcdSpeed = QLCDNumber()
@@ -51,7 +70,6 @@ class YacmtGUI(QWidget):
         self.report_timer.timeout.connect(self._new_report)
         self.report_timer.start(5000)
 
-        self.setLayout(grid)
         self.setGeometry(0, 0, 320, 240)
         self.setWindowTitle('YACMT')
         self.show()
@@ -64,12 +82,20 @@ class YacmtGUI(QWidget):
         try:
             self.lcdRunTime.display(
                 str(datetime.timedelta(seconds=yacmt_json.get("run_time"))))
-        except TypeError as e:
+        except TypeError:
             self.lcdRunTime.display("00:00:00")
 
     def _new_report(self):
         yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
         insert_report(yacmt_json)
+
+    def _upload_reports(self):
+        try:
+            upload_reports()
+        except OperationalError as e:
+            from PyQt5.QtWidgets import QErrorMessage
+            error_dialog = QErrorMessage()
+            error_dialog.showMessage(str(e))
 
 
 def main():

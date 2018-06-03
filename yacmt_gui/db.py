@@ -90,3 +90,39 @@ def insert_report(data: Dict, vehicle: int = 1):
     finally:
         session.close()
 
+
+def upload_reports():
+    psgsql_engine = create_engine(psgsql_db)
+    Sqlite_session = sessionmaker(bind=sqlite_engine)
+    Psgsql_session = sessionmaker(bind=psgsql_engine)
+    sqlite_session = Sqlite_session()
+    psgsql_session = Psgsql_session()
+    result = sqlite_session.query(Report).filter_by(sent=False)
+    try:
+        for i in result.all():
+            new_instance = {
+                "vehicle": i.vehicle,
+                "datetime": str(i.datetime),
+                "sent": True,
+                "eng_load": i.eng_load,
+                "eng_cool_temp": i.eng_cool_temp,
+                "intake_manifold_abs_press": i.intake_manifold_abs_press,
+                "eng_rpm": i.eng_rpm,
+                "speed": i.speed,
+                "intake_air_temp": i.intake_air_temp,
+                "mass_air_flow": i.mass_air_flow,
+                "throttle_pos": i.throttle_pos,
+                "run_time": i.run_time,
+                "control_mod_voltage": i.control_mod_voltage
+            }
+            psgsql_session.add(Report(**new_instance))
+        psgsql_session.commit()
+        result.update({Report.sent: True})
+        sqlite_session.commit()
+    except:
+        sqlite_session.rollback()
+        psgsql_session.rollback()
+        raise
+    finally:
+        sqlite_session.close()
+        psgsql_session.close()
