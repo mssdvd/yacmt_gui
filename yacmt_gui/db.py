@@ -78,6 +78,15 @@ def insert_report(data: Dict, vehicle: int = 1):
         "datetime": datetime.datetime.now(),
         "sent": False
     })
+
+    # check types
+    if type(data.get("control_mod_voltage")) is not int:
+        return
+    else:
+        for k, v in data.items():
+            if v in ("NO DATA", "ERROR", "?"):
+                data[k] = 0
+
     Session = sessionmaker(bind=sqlite_engine)
     session = Session()
     try:
