@@ -75,7 +75,10 @@ class YacmtGUI(QMainWindow):
         self.show()
 
     def _update_display(self):
-        yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+        try:
+            yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+        except:
+            return
         for k, v in yacmt_json.items():
             if v in ("NO DATA", "ERROR", "?"):
                 yacmt_json[k] = 0
@@ -89,7 +92,10 @@ class YacmtGUI(QMainWindow):
             self.lcdRunTime.display("00:00:00")
 
     def _new_report(self):
-        yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+        try:
+            yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+        except:
+            return
         insert_report(yacmt_json)
 
     def _upload_reports(self):
