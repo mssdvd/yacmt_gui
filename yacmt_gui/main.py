@@ -6,7 +6,6 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QGridLayout, QLabel,
                              QLCDNumber, QMainWindow, QWidget, qApp)
-
 from sqlalchemy.exc import OperationalError
 
 from .db import init_db, insert_report, upload_reports
@@ -68,7 +67,7 @@ class YacmtGUI(QMainWindow):
         self.display_timer.start(1000)
         self.report_timer = QTimer()
         self.report_timer.timeout.connect(self._new_report)
-        self.report_timer.start(5000)
+        self.report_timer.start(10000)
 
         self.setGeometry(0, 0, 320, 240)
         self.setWindowTitle('YACMT')
