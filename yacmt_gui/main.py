@@ -48,9 +48,21 @@ class YacmtGUI(QMainWindow):
         labelRPM = QLabel(self.lcdRPM)
         labelRPM.setText("RPM")
 
+        # Engine load
+        self.lcdLoad = QLCDNumber()
+        grid.addWidget(self.lcdLoad, 0, 2)
+        labelLoad = QLabel(self.lcdLoad)
+        labelLoad.setText("Engine load")
+
+        # Engine cool temperature
+        self.lcdCoolTemp = QLCDNumber()
+        grid.addWidget(self.lcdCoolTemp, 1, 0)
+        labelCoolTemp = QLabel(self.lcdCoolTemp)
+        labelCoolTemp.setText("Coolant temp")
+
         # Control Module voltage
         self.lcdCMV = QLCDNumber()
-        grid.addWidget(self.lcdCMV, 1, 0)
+        grid.addWidget(self.lcdCMV, 1, 1)
         labelCMV = QLabel(self.lcdCMV)
         labelCMV.setText("CMV")
 
@@ -83,6 +95,8 @@ class YacmtGUI(QMainWindow):
                 yacmt_json[k] = 0
         self.lcdRPM.display(yacmt_json.get("eng_rpm"))
         self.lcdSpeed.display(yacmt_json.get("speed"))
+        self.lcdLoad.display(yacmt_json.get("eng_load"))
+        self.lcdCoolTemp.display(yacmt_json.get("eng_cool_temp"))
         self.lcdCMV.display(yacmt_json.get("control_mod_voltage"))
         try:
             self.lcdRunTime.display(
