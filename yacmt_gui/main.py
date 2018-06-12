@@ -5,7 +5,8 @@ import sys
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QGridLayout, QLabel,
-                             QLCDNumber, QMainWindow, QWidget, qApp)
+                             QLCDNumber, QMainWindow, QPushButton, QTabWidget,
+                             QWidget, qApp)
 from sqlalchemy.exc import OperationalError
 
 from .db import init_db, insert_report, upload_reports
@@ -18,9 +19,12 @@ class YacmtGUI(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        main_widget = QWidget()
-        main_widget.showFullScreen()
-        self.setCentralWidget(main_widget)
+        self.tabs = QTabWidget()
+        self.setCentralWidget(self.tabs)
+        self.monitor_tab = Monitor(self)
+        self.tabs.addTab(self.monitor_tab, "Monitor")
+        self.settings_tab = Settings(self)
+        self.tabs.addTab(self.settings_tab, "Settings")
 
         exit_action = QAction(
             QIcon.fromTheme("application-exit"), "Exit", self)
@@ -33,8 +37,25 @@ class YacmtGUI(QMainWindow):
         self.toolbar.addAction(exit_action)
         self.toolbar.addAction(upload_action)
 
+        self.setGeometry(0, 0, 320, 240)
+        self.setWindowTitle('YACMT')
+        self.show()
+
+    def _upload_reports(self):
+        try:
+            upload_reports()
+        except OperationalError as e:
+            from PyQt5.QtWidgets import QErrorMessage
+            error_dialog = QErrorMessage()
+            error_dialog.showMessage(str(e))
+
+
+class Monitor(QWidget):
+    def __init__(self, parent):
+        super(QWidget, self).__init__(parent)
+
         # Grid Layout
-        grid = QGridLayout(main_widget)
+        grid = QGridLayout(self)
 
         # Speed
         self.lcdSpeed = QLCDNumber()
@@ -107,17 +128,28 @@ class YacmtGUI(QMainWindow):
     def _new_report(self):
         try:
             yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+            insert_report(yacmt_json)
         except:
             return
-        insert_report(yacmt_json)
 
-    def _upload_reports(self):
+
+class Settings(QWidget):
+    def __init__(self, parent):
+        super(QWidget, self).__init__(parent)
+        self.delete_button = QPushButton("Delete", self)
+        self.delete_button.setToolTip("Delete the local database")
+        self.delete_button.clicked.connect(self._delete_db)
+        self.delete_button.move(300, 20)
+        self.delete_label = QLabel(self)
+        self.delete_label.setText("Delete the local database")
+        self.delete_label.move(10, 25)
+
+    def _delete_db(self):
+        import os
         try:
-            upload_reports()
-        except OperationalError as e:
-            from PyQt5.QtWidgets import QErrorMessage
-            error_dialog = QErrorMessage()
-            error_dialog.showMessage(str(e))
+            os.remove(os.path.expanduser("~") + "/yacmt.db")
+        except:
+            pass
 
 
 def main():
