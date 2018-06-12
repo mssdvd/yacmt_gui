@@ -2,12 +2,13 @@ import datetime
 import json
 import sys
 
+from sqlalchemy.exc import OperationalError
+
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QGridLayout, QLabel,
                              QLCDNumber, QMainWindow, QPushButton, QTabWidget,
                              QWidget, qApp)
-from sqlalchemy.exc import OperationalError
 
 from .db import init_db, insert_report, upload_reports
 
@@ -108,7 +109,7 @@ class Monitor(QWidget):
 
     def _update_display(self):
         try:
-            yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+            yacmt_json = json.loads(open("/tmp/yacmt.json").read())
         except:
             return
         for k, v in yacmt_json.items():
@@ -127,7 +128,7 @@ class Monitor(QWidget):
 
     def _new_report(self):
         try:
-            yacmt_json = json.loads(open("/tmp/yacmt-server.json").read())
+            yacmt_json = json.loads(open("/tmp/yacmt.json").read())
             insert_report(yacmt_json)
         except:
             return
