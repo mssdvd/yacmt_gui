@@ -38,8 +38,7 @@ class YacmtGUI(QMainWindow):
         self.toolbar.addAction(exit_action)
         self.toolbar.addAction(upload_action)
 
-        self.setGeometry(0, 0, 320, 240)
-        self.setWindowTitle('YACMT')
+        self.showFullScreen()
         self.show()
 
     def _upload_reports(self):
@@ -102,10 +101,6 @@ class Monitor(QWidget):
         self.report_timer = QTimer()
         self.report_timer.timeout.connect(self._new_report)
         self.report_timer.start(10000)
-
-        self.setGeometry(0, 0, 320, 240)
-        self.setWindowTitle('YACMT')
-        self.show()
 
     def _update_display(self):
         try:
