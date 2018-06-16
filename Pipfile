@@ -13,7 +13,6 @@ yacmt = "*"
 [dev-packages]
 "flake8" = "*"
 pydoc-utils = "*"
-ipython = "*"
 pudb = "*"
 
 [requires]
