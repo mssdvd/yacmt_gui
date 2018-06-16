@@ -135,7 +135,7 @@ class Settings(QWidget):
         self.delete_button = QPushButton("Delete", self)
         self.delete_button.setToolTip("Delete the local database")
         self.delete_button.clicked.connect(self._delete_db)
-        self.delete_button.move(300, 20)
+        self.delete_button.move(10, 60)
         self.delete_label = QLabel(self)
         self.delete_label.setText("Delete the local database")
         self.delete_label.move(10, 25)
