@@ -6,9 +6,9 @@ name = "pypi"
 [packages]
 "pyqt5" = "*"
 sqlalchemy = "*"
-yacmt = "*"
 "psycopg2" = "*"
 "psycopg2-binary" = "*"
+yacmt-core = "*"
 
 [dev-packages]
 "flake8" = "*"
