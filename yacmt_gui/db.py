@@ -1,4 +1,5 @@
 import datetime
+from os import getenv
 from os.path import expanduser
 from typing import Any, Dict
 
@@ -9,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()  # type: Any
 sqlite_db = "sqlite:///{}/yacmt.db".format(expanduser("~"))
-psgsql_db = "***REMOVED***"
+psgsql_db = getenv("DATABASE_URL")
 
 sqlite_engine = create_engine(sqlite_db)
 
