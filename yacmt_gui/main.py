@@ -2,13 +2,12 @@ import datetime
 import json
 import sys
 
-from sqlalchemy.exc import OperationalError
-
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QGridLayout, QLabel,
                              QLCDNumber, QMainWindow, QPushButton, QTabWidget,
                              QWidget, qApp)
+from sqlalchemy.exc import OperationalError
 
 from .db import init_db, insert_report, upload_reports
 
@@ -52,7 +51,7 @@ class YacmtGUI(QMainWindow):
 
 class Monitor(QWidget):
     def __init__(self, parent):
-        super(QWidget, self).__init__(parent)
+        super().__init__(parent)
 
         # Grid Layout
         grid = QGridLayout(self)
@@ -131,7 +130,7 @@ class Monitor(QWidget):
 
 class Settings(QWidget):
     def __init__(self, parent):
-        super(QWidget, self).__init__(parent)
+        super().__init__(parent)
         self.delete_button = QPushButton("Delete", self)
         self.delete_button.setToolTip("Delete the local database")
         self.delete_button.clicked.connect(self._delete_db)
